@@ -16,7 +16,7 @@ router.post("/blogs/:userId",Middleware.authenticate,Middleware.authorise, Blogs
 router.get("/getblogs",BlogsController.findBlogs)
 router.get("/filterblogs",BlogsController.filterBlogs)
 router.put("/updateblogs/:blogid",Middleware.authenticate,Middleware.authorise,updateController.updateBlogs)
-router.delete("/delblogs/:blogid",deleteController.deleteBlog)
+router.delete("/delblogs/:blogid",Middleware.authenticate,Middleware.authorise,deleteController.deleteBlog)
 router.delete("/delblogbyparam",deleteController.deleteBlogsByparams )
 router.post("/loginUser",AuthorController.loginUser)
 

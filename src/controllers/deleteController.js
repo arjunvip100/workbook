@@ -9,7 +9,7 @@ const deleteBlog= async function(req,res){
     const deletedBlog=await blogModel.findByIdAndUpdate({ _id:req.params.blogid},{$set: {isDeleted:true,deletedAt:date}},{new:true})
     res.status(200).send({status:true,msg:"Deleted Blog", data: deletedBlog })
 }
-
+//
 const deleteBlogsByparams= async function(req,res){
 
 try{

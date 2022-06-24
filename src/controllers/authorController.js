@@ -1,9 +1,12 @@
 const authorModel = require("../models/authorModel");
 const jwt = require("jsonwebtoken");
-
+const validator= require("validator");
 
 const createAuthor= async function(req, res) {
    let data= req.body;
+   let validate=validator.isEmail(req.body.email)
+        if(!validate){
+            res.status(404).send({status:false, msg:"enter valid emailId"})}
    let savedData= await authorModel.create(data)
    res.send({status: true, msg: savedData})
     }

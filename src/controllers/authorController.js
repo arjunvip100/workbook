@@ -4,7 +4,7 @@ const validator= require("validator");
 
 const createAuthor= async function(req, res) {
     try {
-        let { title, firstName, lastName, email, password } = req.body
+        let { title, fname, lname, email, password } = req.body
         if (!title) { return res.status(400).send({ status: false, message: "author title is required" }) }
         if (title !== "Mr") {
             if (title !== "Mrs") {
@@ -13,16 +13,16 @@ const createAuthor= async function(req, res) {
                 }
             }
         }
-        if (!firstName) {
+        if (!fname) {
             return res.status(400).send({ status: false, message: "author first name is required" })
         }
-        if (!/^[a-zA-Z]+$/.test(firstName)) {
+        if (!/^[a-zA-Z]+$/.test(fname)) {
             res.status(400).send({ status: false, message: "First name should be a Character" })
         }
-        if (!lastName) {
+        if (!lname) {
             return res.status(400).send({ status: false, message: "author last name is required" })
         }
-        if (!/^[a-zA-Z]+$/.test(lastName)) {
+        if (!/^[a-zA-Z]+$/.test(lname)) {
             res.status(400).send({ status: false, message: "Last name should be a Character" })
         }
         if (!email) {
@@ -43,7 +43,7 @@ const createAuthor= async function(req, res) {
     catch (err) { return res.status(500).send({ status: false, msg: err.message }) }
 }
 
-    const loginUser = async function (req, res) {
+    const login = async function (req, res) {
         try {
             let userName = req.body.email
             let password = req.body.password
@@ -51,13 +51,13 @@ const createAuthor= async function(req, res) {
             if (!user)
                 return res.status(404).send({status: false,msg: "username or the password is not correct"})
             let token = jwt.sign({ userId: user._id.toString(),
-                batch: "thorium",
-                organisation: "FUnctionUp",},"functionup-thorium")   
-            res.status(200).send({ status: true, data: token, authorId: user._id  })  
+                batch: "radon",
+                organisation: "FUnctionUp",},"functionup-radon")   
+            res.status(200).send({ status: true, data: token  })  
         } catch (err) {
             res.status(500).send({ msg: "Error", error: err.message })
         }
     }
-module.exports.loginUser= loginUser
+module.exports.login= login
 module.exports.createAuthor= createAuthor
 

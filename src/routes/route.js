@@ -8,15 +8,21 @@ router.get("/test-me", function (req, res) {
     res.send("My first ever api!")
 })
 
-
+//Author Apis
 router.post("/authors", AuthorController.createAuthor)
-router.post("/blogs/:userId",Middleware.authenticate,BlogsController.createBlog)
-router.get("/getblogs",BlogsController.findBlogs)
-// router.get("/filterblogs",BlogsController.filterBlogs)
-router.put("/updateblogs/:blogid",Middleware.authenticate,Middleware.authorise,BlogsController.updateBlogs)
-router.delete("/delblogs/:blogid",Middleware.authenticate,Middleware.authorise,BlogsController.deleteBlog)
+router.post("/login",AuthorController.login)
+
+//Blog Apis
+router.post("/blogs",BlogsController.createBlog)
+router.get("/getblogs",BlogsController.getblogs)
+router.put("/updateblogs/:blogid",Middleware.authToken,BlogsController.updateBlogs)
+router.delete("/delblogs/:blogid",Middleware.authToken,BlogsController.deleteBlog)
 router.delete("/delblogbyparam",BlogsController.deleteBlogsByparams )
-router.post("/loginUser",AuthorController.loginUser)
+
+
+
+
+
 
 
 module.exports = router;

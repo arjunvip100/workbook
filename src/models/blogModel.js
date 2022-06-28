@@ -28,7 +28,7 @@ const blogSchema = new mongoose.Schema({
     },
     isPublished: {
         type: Boolean,
-        default: false
+        default: true
     },
     publishedAt: {
         
@@ -44,10 +44,6 @@ const blogSchema = new mongoose.Schema({
     }
    
 }, { timestamps: true });
-
-
-
-
 
 
 module.exports = mongoose.model('Blog', blogSchema)

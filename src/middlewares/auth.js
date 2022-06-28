@@ -1,40 +1,36 @@
 const jwt = require('jsonwebtoken')
-const Author = require("../models/authorModel")
-const Blogs = require("../models/blogModel")
-const mongoose = require('mongoose')
+const blogModel= require("../models/blogModel")
 
-
-const authenticate = async function (req, res, next) {
-
-  let token = req.headers['x-api-key']
-  if (!token) token = req.headers['x-Api-key']
-  if (!token) res.status(400).send({ status: false, msg: "PLease input token " })
-  let validtoken = jwt.verify(token, "functionup-thorium")
-  if (!validtoken) return res.status(402).send({ status: false, msg: "Please enter valid Token " })
-
-  next()
-
+const authToken = async function (req, res, next) {
+    try {
+        let token = req.headers["x-api-key"]
+        if (!token) token = req.headers['X-Api-Key']
+        if (!token) {
+            return res.status(400).send({ status: false, msg: "token must be present in the request header" })
+        }
+        let decodedToken = jwt.verify(token, "functionup-radon")
+        if (!decodedToken) {
+            return res.status(400).send({ status: false, msg: "token is invalid" });
+        }
+    
+        //authorization
+        
+        let userblogid= req.params.blogid
+        if (!userblogid) return res.status(400).send({status: false, msg:"Please enter blog id in params" })
+        let userauthorid= await blogModel.findOne({_id:userblogid})
+        if (!userauthorid) return res.status(400).send({status: false, msg:"Please enter valid blog id in params" })
+        
+        let userLoggedIn = decodedToken.userId
+        // console.log(userauthorid)
+        // console.log(userLoggedIn)
+        if (userauthorid.authorId != userLoggedIn) {
+            return res.status(400).send({ status: false, msg: "not authorized" })
+        }
+      next();
+     }
+     catch (err) {
+         return res.status(500).send({ status: false, msg: err.message })
+    }
 }
 
-
-const authorise = async function (req, res, next) {
-
-  let token = req.headers['x-api-key']
-  if (!token) {
-    return res.status(400).send({ status: false, msg: "Please input token headers" })
-  }
-  let decodedtoken = jwt.verify(token, "functionup-thorium")
-
-  if (!decodedtoken) res.status(402).send({ status: false, msg: "Please enter valid token " })
-  let userBlog = req.params.blogid
-  let userAuth = decodedtoken.userId
-  let findBlogs = await Blogs.findOne({_id:userBlog });
-  console.log(findBlogs)
-  if (!findBlogs) return res.status(402).send({ status: false, msg: "Please enter valid blogId" })
-  if (userAuth != findBlogs.authorId) res.status(404).send({status:false,msg: "Please login with your mail id "})
-  next()
-}
-
-
-module.exports.authenticate= authenticate
-module.exports.authorise= authorise
+module.exports.authToken = authToken

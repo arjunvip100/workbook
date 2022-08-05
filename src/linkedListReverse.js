@@ -75,13 +75,34 @@ class LinkedList {
         
     }
 
+    reverse(){                                   //[2,10,16,26]
+        if(!this.head.next){
+            return this.head;
+        }
+        let first= this.head;                   //2
+        this.tail= this.head;                   //26
+        let second= first.next;                 //10
+        while(second){
+            const temp = second.next;           //temp=16
+            second.next = first;                //
+            first = second;
+            second = temp;
+        }
+        this.head.next = null;
+        this.head = first;
+        return this.printlist
+        
+    }
+
 }
+
 const myList = new LinkedList(10);
 myList.append(16)
 myList.append(26)
 myList.prepend(2)
 myList.insert(2,89)
 myList.remove(2)
+myList.reverse()
 let arr = myList.printlist();
 
 
